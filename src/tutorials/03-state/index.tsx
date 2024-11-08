@@ -1,49 +1,54 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-type navLinks = {
-	id: number;
+type Link = {
+	id: string;
 	link: string;
 	text: string;
 };
 
 const navLinks = [
 	{
-		id: 1,
+		id: uuidv4(),
 		link: "#home",
 		text: "home",
 	},
 	{
-		id: 1,
+		id: uuidv4(),
 		link: "#courses",
 		text: "courses",
 	},
 	{
-		id: 1,
+		id: uuidv4(),
 		link: "#home",
 		text: "about",
-	},
-	{
-		id: 1,
-		link: "#home",
-		text: "contact",
 	},
 ];
 
 const FirstComponent = () => {
-	const [count, setCount] = useState(1);
-	const [list, setList] = useState<string[]>([]);
-	const [links, setNavLinks] = useState(navLinks);
+	const [links, setNavLinks] = useState<Link[]>(navLinks);
 	return (
 		<div>
-			<h2 className="mb-1">React and typescript</h2>
 			<button
 				className="btn btn-center"
 				onClick={() => {
-					setCount(count + 1);
-					setNavLinks([...links, { id: 1, link: "x", text: "d" }]);
+					setNavLinks([
+						...links,
+						{
+							id: uuidv4(),
+							link: uuidv4() + "link",
+							text: uuidv4() + "--link",
+						},
+					]);
 				}}>
-				{count}
+				set link
 			</button>
+
+			<ul>
+				{links.map((link) => {
+					return <li key={link.id}>{link.text}</li>;
+				})}
+			</ul>
 		</div>
 	);
 };

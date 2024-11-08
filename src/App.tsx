@@ -1,4 +1,4 @@
-import Component from "./tutorials/07-redux-toolkit";
+import Component from "./tutorials/03-state";
 
 function App() {
 	return (

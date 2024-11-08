@@ -1,6 +1,11 @@
 import React from "react";
+import { PropsWithChildren } from "react";
 
-type Component = { name: string; age: number; children?: React.ReactNode };
+type Component = PropsWithChildren<{
+	name: string;
+	age: number;
+	children?: PropsWithChildren;
+}>;
 const FirstComponent = (props: Component) => {
 	return (
 		<div>
