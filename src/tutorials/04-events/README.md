@@ -23,7 +23,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 ###### currentTarget:
 
-It refers to the current target and ts can infer the type which `<HTMLFormElement>`.
+``It refers to the current target and ts can infer the type which`<HTMLFormElement>`.
 
 ```ts
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
