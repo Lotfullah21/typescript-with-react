@@ -268,3 +268,12 @@ const FetchDataComponent = () => {
 };
 export default FetchDataComponent;
 ```
+
+Asynchronous Call with async and await:
+
+The function fetchData is marked with the async keyword, which means it will return a promise by default.
+Inside the function, we use await with axios.get<Tour[]>(url), an asynchronous operation. This returns a promise that resolves with the response from the API.
+Type of fetchData:
+
+By specifying Promise<Tour[]> as the return type of fetchData, we're saying that this function will eventually (once the asynchronous operation completes) resolve to an array of Tour objects.
+Since axios.get returns a promise, fetchData itself must also return a promise.
