@@ -12,21 +12,8 @@ const ParentComponent = () => {
 const Component = () => {
 	const context = useTheme();
 	console.log(context);
-	return (
-		<div>
-			<h2>CONTEXT HOOK</h2>
-			<button
-				className="btn btn-center"
-				onClick={() => {
-					if (context.theme === "dark") {
-						context.setTheme("system");
-						return;
-					}
-					context.setTheme("dark");
-				}}>
-				toggle theme
-			</button>
-		</div>
-	);
+
+	return <div>Component</div>;
 };
+
 export default ParentComponent;

@@ -1,4 +1,3 @@
-import { retry } from "@reduxjs/toolkit/query";
 import { fetchTours } from "./types";
 import { useQuery } from "@tanstack/react-query";
 

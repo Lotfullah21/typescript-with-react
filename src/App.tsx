@@ -1,11 +1,7 @@
-import Component from "./tutorials/03-state";
+import Component from "./tutorials/06-fetch/02-using-axio";
 
 function App() {
-	return (
-		<main>
-			<Component></Component>
-		</main>
-	);
+	return <Component></Component>;
 }
 
 export default App;

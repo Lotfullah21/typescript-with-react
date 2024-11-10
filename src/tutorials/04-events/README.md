@@ -1,16 +1,16 @@
-## Events
+# Events
 
-#### 1. ChangeEvent
+### 1. ChangeEvent
 
-When we are passing event in inline html, ts can infer the type and information it needs, but when adding external functions, we need to write what kind of events and which kind of elements we are inferring to.
+When we pass events in inline html, TS can infer the type and the information it needs, but when adding external functions, we need to write what kind of events and which kind of elements we are referring to inside the function.
 
-Inline
+- Inline
 
 ```ts
 onChange={(e) => setText(e.target.value)}></input>
 ```
 
-External
+- External
 
 ```ts
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,11 +19,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 };
 ```
 
-#### 2. SubmitEvent
-
-###### currentTarget:
-
-``It refers to the current target and ts can infer the type which`<HTMLFormElement>`.
+### 2. SubmitEvent
 
 ```ts
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,9 +28,9 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 };
 ```
 
-###### target
+`#### currentTarget`: It refers to the current target and TS can infer the type which is `<HTMLFormElement>`.
 
-If we use target, we need to specify the type of the target, we can assert the type.
+`#### target`: If we use target, we need to specify the type of the target, we can assert the type.
 
 ```ts
 const formData = new FormData(e.target as HTMLFormElement);
@@ -42,59 +38,241 @@ const formData = new FormData(e.target as HTMLFormElement);
 
 `e.preventDefault()` It stops the form from a full page reload which is the default behavior of forms.
 
-###### Form Data Extraction:
+1. #### Form Data Extraction:
 
-`new FormData(e.target)` is used to create a form data object from the form element(e.target).
-FormData captures all the form fields and their values.
+`new FormData(e.target)` creates a FormData instance from the form.
 
-`Object.fromEntries(formData)` is used to convert form data into plain javascript object.
+`FormData` captures all the form data fields.
+
+`Object.fromEntries(formData)` is used to convert FormData instance into plain javascript object.
 the form's fields names are the keys and values are the input values.
 
 ```ts
 import React, { useState } from "react";
-
-const FirstComponent = () => {
+function Component() {
 	const [text, setText] = useState("");
 	const [email, setEmail] = useState("");
-
-	type Person = {
-		name: string;
-	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setEmail(e.target.value);
 	};
+
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const formData = new FormData(e.target as HTMLFormElement);
+		// create a new FormData instance from the form
+		const formData = new FormData(e.currentTarget);
+		// convert the form FormData instance into plain javascript object
 		const data = Object.fromEntries(formData);
-		// We have specify what kind of data we are expecting.
-		const text = formData.get("name") as string;
-		const person: Person = { name: data.name as string };
-		console.log(data);
+		const text = formData.get("text") as string;
+		console.log(text);
+		console.log("form data instance", formData);
+		console.log("data", data);
 	};
+
 	return (
-		<div>
-			<h2 className="mb-1">Events</h2>
-			<form className="form" onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit}>
+			<div>
 				<input
 					type="text"
-					className="form-input mb-1"
+					name="text"
 					value={text}
-					name="name"
-					onChange={(e) => setText(e.target.value)}></input>
+					placeholder="text"
+					onChange={(e) => setText(e.target.value)}
+				/>
+			</div>
+
+			<div>
 				<input
 					type="email"
-					className="form-input mb-1"
+					name="email"
 					value={email}
+					placeholder="email"
 					onChange={handleChange}
-					name="email"></input>
-				<button className="btn btn-block" type="submit">
-					submit
-				</button>
-			</form>
+				/>
+			</div>
+			<button>submit</button>
+		</form>
+	);
+}
+
+export default Component;
+```
+
+## Challenge
+
+### Destructuring props
+
+## Parent Component:
+
+```tsx
+import Component from "./tutorials/04-events/first";
+function App() {
+	return (
+		<main>
+			<Component name="ahmad" type="basic"></Component>
+			<Component
+				name="ahmad"
+				email="king@gmail.com"
+				type="advanced"></Component>
+		</main>
+	);
+}
+
+export default App;
+```
+
+#### First Option
+
+when destructuring props from parent, add a place holder name and its type annotation next to it.
+
+```ts
+// child component
+const FirstComponent = (props: {
+	name: string;
+	email: string;
+	type: string;
+}) => {
+	return <div>FirstComponent</div>;
+};
+export default FirstComponent;
+```
+
+Or
+
+```ts
+type compType = {
+	name: string;
+	email: string;
+	type: string;
+};
+
+const FirstComponent = (props: compType) => {
+	return (
+		<div>
+			<h1>{props.name}</h1>
+			<h2>{props.email}</h2>
 		</div>
 	);
 };
 export default FirstComponent;
+```
+
+#### Second Option
+
+### Directly destructuring
+
+add all the props which are expected beside its type annotation.
+
+##### Crucial
+
+WE CANNOT add the optional `?` sign when destructuring object.
+
+```ts
+// correct
+const First = ({
+	name,
+	email,
+	type,
+}: {
+	name: string;
+	email?: string;
+	type: string;
+})
+```
+
+```ts
+// wrong
+const First = ({
+	name,
+	email?,
+	type,
+}: {
+	name: string;
+	email: string;
+	type: string;
+})
+```
+
+### Complete
+
+```tsx
+const First = ({
+	name,
+	email,
+	type,
+}: {
+	name: string;
+	email?: string;
+	type: string;
+}) => {
+	return (
+		<div>
+			<h1>{name}</h1>
+			<h2>{email}</h2>
+			<h3>{type}</h3>
+		</div>
+	);
+};
+export default First;
+```
+
+```tsx
+const First = ({
+	name,
+	email,
+	type,
+}: {
+	name: string;
+	email?: string;
+	type: string;
+}) => {
+	return (
+		<>
+			{type === "basic" ? (
+				<h1>{name}</h1>
+			) : (
+				<div>
+					<h2>{name}</h2> <p>{email}</p>
+				</div>
+			)}
+		</>
+	);
+};
+export default First;
+```
+
+## Crucial
+
+When using conditional rendering, we need to wrap entire `JSX` element around `<></>` and `()`, because we are rendering two different structure based on a condition.
+
+```tsx
+// wrong
+return (
+
+			{type === "basic" ? (
+				<h1>{name}</h1>
+			) : (
+				<div>
+					<h2>{name}</h2> <p>{email}</p>
+				</div>
+			)}
+
+	);
+};
+```
+
+```tsx
+// correct
+return (
+
+			{type === "basic" ? (
+				<h1>{name}</h1>
+			) : (
+				<div>
+					<h2>{name}</h2> <p>{email}</p>
+				</div>
+			)}
+
+	);
+};
 ```
