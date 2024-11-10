@@ -277,3 +277,20 @@ Type of fetchData:
 
 By specifying Promise<Tour[]> as the return type of fetchData, we're saying that this function will eventually (once the asynchronous operation completes) resolve to an array of Tour objects.
 Since axios.get returns a promise, fetchData itself must also return a promise.
+
+## Purpose of useQuery
+
+The useQuery hook is designed to fetch and cache data asynchronously, managing the process of fetching data from a remote source (like an API) while providing out-of-the-box caching, error handling, loading states, and more. This helps manage the complexity of data fetching in a React app, especially when data needs to be reused across components or pages.
+
+### 3. How useQuery Works
+
+Query Key: The first parameter (like 'tours' in the example above) is a unique identifier for this query. React Query uses it to cache and track the fetched data. When the same query key is used again, React Query can serve data from the cache instead of making another request.
+
+Fetch Function: The second parameter (fetchData) is the async function responsible for fetching the data. It’s the same function we created earlier, which returns a promise of Tour[].
+
+Query Result Object:
+
+data: Contains the fetched data if the request is successful.
+error: Contains the error object if the request fails.
+isLoading: Boolean that’s true while the request is in progress.
+isError: Boolean that’s true if there was an error with the request.
